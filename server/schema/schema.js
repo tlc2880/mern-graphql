@@ -9,6 +9,7 @@ const {
   GraphQLSchema,
   GraphQLList,
   GraphQLNonNull,
+  GraphQLEnumType,
 } = require('graphql');
 
 // Project Type
@@ -94,9 +95,21 @@ const mutation = new GraphQLObjectType({
         return client.save();
       },
     },
+
+    // Delete a client
+    deleteClient: {
+      type: ClientType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID)},
+      },
+        resolve(parent, args) {
+          return Client.findByIdAndRemove(args.id)
+      },
+    },
   },
 });
 
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation,
 })
