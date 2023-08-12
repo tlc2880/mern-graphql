@@ -1,4 +1,4 @@
-// Mongoose modeuls
+// Mongoose modules
 const Project = require('../models/Project');
 const Client = require('../models/Client')
 
@@ -97,18 +97,39 @@ const mutation = new GraphQLObjectType({
     },
 
     // Delete a client
-    deleteClient: {
-      type: ClientType,
+    addProject: {
+      type: ProjectType,
       args: {
-        id: { type: GraphQLNonNull(GraphQLID)},
+        name: { type: GraphQLNonNull(GraphQLString) },
+        description: { type: GraphQLNonNull(GraphQLString) },
+        status: {
+          type: new GraphQLEnumType({
+            name: 'ProjectStatus',
+            values: {
+              new: { value: 'Not Started' },
+              progress: { value: 'In Progress' },
+              completed: { value: 'Completed' },
+            },
+          }),
+          defaultValue: 'Not Started',
+        },
+        clientId: { type: GraphQLNonNull(GraphQLID) },
       },
-        resolve(parent, args) {
-          return Client.findByIdAndRemove(args.id)
+      resolve(parent, args) {
+        const project = new Project({
+          name: args.name,
+          description: args.description,
+          status: args.status,
+          clientId: args.clientId,
+        });
+
+        return project.save();
       },
     },
+
   },
 });
-
+// Export
 module.exports = new GraphQLSchema({
   query: RootQuery,
   mutation,
