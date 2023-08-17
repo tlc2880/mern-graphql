@@ -73,7 +73,6 @@ export default function AddClientModal() {
                          className ="form-control" id="email" 
                          value={email} onChange={(e) => setEmail(e.target.value)}
                          />
-
                     </div>
 
                     <div className="mb-3">
@@ -84,7 +83,6 @@ export default function AddClientModal() {
                          className ="form-control" id="phone" 
                          value={phone} onChange={(e) => setPhone(e.target.value)}
                          />
-
                     </div>
 
                     <button type="submit" data-bs-dismiss="modal" className="btn btn-secondary">Submit</button>
